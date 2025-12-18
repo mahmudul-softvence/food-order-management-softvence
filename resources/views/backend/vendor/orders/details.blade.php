@@ -2,7 +2,6 @@
 
     <h5 class="mb-3">Order #{{ $order->id }}</h5>
 
-    {{-- Order Details Table --}}
     <table class="table table-bordered mb-4">
         <tbody>
             <tr>
@@ -44,7 +43,6 @@
         </tbody>
     </table>
 
-    {{-- ================= Filter for Latest Orders ================= --}}
     <div class="mb-3">
         <label class="fw-bold">Filter Payment Status:</label>
         <select id="paymentFilter" class="form-select w-25">

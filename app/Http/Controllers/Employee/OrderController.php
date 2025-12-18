@@ -22,6 +22,8 @@ class OrderController extends Controller
 
     public function vendor_list($id)
     {
+        $food_category_id = $id;
+
         $foods = TodayMeal::with('food')
             ->where('food_category_id', $id)
             ->whereDate('created_at', Carbon::today())
@@ -29,7 +31,7 @@ class OrderController extends Controller
 
         $orders = Order::where('user_id', Auth::id())->get();
 
-        return view('backend.employee.orders.vendor_list', compact('foods', 'orders'));
+        return view('backend.employee.orders.vendor_list', compact('foods', 'orders', 'food_category_id'));
     }
 
 
@@ -66,6 +68,7 @@ class OrderController extends Controller
             'user_id' => $user_id,
             'vendor_id' => $request->vendor_id,
             'food_id' => $food_id,
+            'food_category_id' => $request->food_category_id,
             'quantity' => $request->quantity,
             'unit_price' => $unit_price,
             'total_price' => $total_price,

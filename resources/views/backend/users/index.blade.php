@@ -104,7 +104,7 @@
                                     @if ($role == 'admin') bg-danger
                                     @elseif($role == 'employee') bg-info
                                     @elseif($role == 'vendor') bg-warning
-                                    @else bg-secondary @endif
+                                    @else bg-tertiary @endif
                                 ">
                                 {{ ucfirst($role) }}
                             </span>

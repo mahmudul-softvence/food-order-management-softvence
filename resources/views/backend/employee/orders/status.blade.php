@@ -90,7 +90,7 @@
             </thead>
             <tbody>
 
-                @foreach ($orders as $index => $order)
+                @forelse ($orders as $index => $order)
                     <tr>
                         <td>{{ $index + 1 }}</td>
                         <td>{{ $order->order_no }}</td>
@@ -129,7 +129,11 @@
                             @endcan
                         </td>
                     </tr>
-                @endforeach
+                @empty
+                    <tr>
+                        <td colspan="9" class="text-center text-muted">No Orders Found.</td>
+                    </tr>
+                @endforelse
 
             </tbody>
         </table>

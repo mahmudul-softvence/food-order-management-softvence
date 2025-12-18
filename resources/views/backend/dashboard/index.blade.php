@@ -30,11 +30,11 @@
 
                                     <h6 class="text-muted fw-500 pt-2">{{ $greet }}</h6>
 
-                                    <p class="pb-2">{{ __('messages.today_updates') }}</p>
+                                    <p class="pb-3">{{ __('messages.today_updates') }}</p>
                                 </div>
                                 <div>
                                     <a href="#" class="btn btn-primary">
-                                        {{ __('messages.go_to_settings') }}
+                                        <i class="bi bi-gear me-1"></i> {{ __('messages.go_to_settings') }}
                                     </a>
                                 </div>
                             </div>
@@ -118,45 +118,59 @@
         <div class="row pt-4 g-4">
             <div class="col-md-7">
                 <div class="card border-0 shadow ">
-                    <div class="card-header">
-                        <h5 class="card-title">{{ __('messages.new_order_request') }}</h5>
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0">{{ __('messages.new_order_request') }}</h5>
+
+                        <div id="bulkActions" class="d-none">
+                            <button class="btn btn-danger btn-sm me-2" onclick="bulkSubmit('cancelled')">
+                                <i class="bi bi-x-circle"></i> Cancel All
+                            </button>
+
+                            <button class="btn btn-success text-white btn-sm" onclick="bulkSubmit('delivered')">
+                                <i class="bi bi-check-circle"></i> Deliver All
+                            </button>
+                        </div>
                     </div>
+
                     <div class="card-body table-wrapper table-responsive">
                         <table class="table table-hover">
                             <thead>
                                 <tr>
+                                    <th>
+                                        <input type="checkbox" id="selectAll">
+                                    </th>
                                     <th>#</th>
                                     <th>{{ __('messages.customer') }}</th>
                                     <th>{{ __('messages.quantity') }}</th>
                                     <th>{{ __('messages.amount') }}</th>
-                                    <th>{{ __('messages.status') }}</th>
                                     <th>{{ __('messages.payment') }}</th>
                                     <th>{{ __('messages.action') }}</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                @php
-                                    $payments = ['due', 'paid'];
-                                @endphp
 
+                            <tbody>
                                 @foreach ($pending_orders as $index => $order)
                                     <tr>
+                                        <td>
+                                            <input type="checkbox" class="order-checkbox" value="{{ $order->id }}">
+                                        </td>
+
                                         <td>{{ $index + 1 }}</td>
+
                                         <td>{{ $order->user->name ?? 'NA' }}</td>
+
                                         <td>{{ $order->quantity }}</td>
+
                                         <td>${{ number_format($order->total_price, 2) }}</td>
-                                        <td><span class="badge bg-warning">Pending</span></td>
-                                        @php $pay = $payments[array_rand($payments)]; @endphp
+
                                         <td>
                                             <span
-                                                class="badge
-                                            {{ $pay == 'paid' ? 'bg-success' : 'bg-danger' }}">
-                                                {{ __('messages.' . $pay) }}
+                                                class="badge {{ $order->payment_status == 'paid' ? 'bg-success' : 'bg-danger' }}">
+                                                {{ __($order->payment_status) }}
                                             </span>
                                         </td>
 
                                         <td>
-
                                             @if ($order->status == 'pending')
                                                 <button class="btn btn-danger text-white btn-sm me-2"
                                                     onclick="submitStatusForm({{ $order->id }}, 'cancelled')">
@@ -165,8 +179,7 @@
                                             @endif
 
                                             <button class="btn btn-gray-700 btn-sm me-2" data-bs-toggle="tooltip"
-                                                data-bs-placement="top" data-bs-custom-class="small-tooltip" title="View Order"
-                                                onclick="viewOrder({{ $order->id }})">
+                                                title="View Order" onclick="viewOrder({{ $order->id }})">
                                                 <i class="bi bi-eye"></i>
                                             </button>
 
@@ -176,16 +189,10 @@
                                                     <i class="bi bi-check-circle me-2"></i>Delivered
                                                 </button>
                                             @endif
-                                            <form id="statusForm" action="{{ route('vendor.order.status.update', 'ID_HERE') }}"
-                                                method="POST" class="d-none">
-                                                @csrf
-                                                <input type="hidden" name="status" id="statusInput">
-                                            </form>
                                         </td>
                                     </tr>
                                 @endforeach
                             </tbody>
-
                         </table>
 
                         <div class="mt-4">
@@ -194,6 +201,13 @@
                     </div>
                 </div>
             </div>
+
+            <form id="bulkForm" action="{{ route('vendor.order.bulkStatus') }}" method="POST" class="d-none">
+                @csrf
+                <input type="hidden" name="status" id="bulkStatus">
+                <input type="hidden" name="order_ids" id="bulkOrderIds">
+            </form>
+
 
             <div class="col-md-5">
                 <div class="row g-4">
@@ -229,7 +243,8 @@
 
                                     <div class="mt-4">
                                         <button type="button" class="btn btn-info w-100 add-category-btn"
-                                            data-category-id="{{ $category->id }}" data-category-name="{{ $category->name }}">
+                                            data-category-id="{{ $category->id }}"
+                                            data-category-name="{{ $category->name }}">
                                             <i class="bi bi-plus-circle me-1"></i>
                                             Add {{ $category->name }}
                                         </button>
@@ -315,8 +330,35 @@
                 </div>
             </div>
 
+
+            <div class="modal fade" id="restockModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-sm modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <form id="restockForm" action="{{ route('vendor.food.stock.update') }}" method="POST">
+                                @csrf
+
+                                <input type="hidden" name="meal_id" id="restockMealId">
+
+                                <div class="mb-4">
+                                    <label class="form-label small">Add Stock</label>
+                                    <input type="number" class="form-control form-control-sm" name="stock" min="1"
+                                        required>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary btn-sm w-100">
+                                    Update Stock
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
             @php
-                $foods = App\Models\Food::get();
+                $foods = App\Models\Food::where('user_id', auth()->id())->get();
             @endphp
 
             <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-hidden="true">
@@ -331,12 +373,12 @@
                         <form id="todayMealForm" method="POST" action="{{ route('vendor.food.set_today_meal') }}">
                             @csrf
 
-                            <input type="hidden" name="food_category_id" id="food_category_id">
+                            <input type="hidden" name="food_category_id[]" id="food_category_id">
                             <div class="modal-body">
 
                                 <div class="mb-3">
                                     <label class="form-label">Foods</label>
-                                    <select class="form-select chosen-select" name="food_id">
+                                    <select class="form-select select2" name="food_id">
                                         <option value="">Select Food</option>
                                         @foreach ($foods as $food)
                                             <option value="{{ $food->id }}">{{ $food->name }}</option>
@@ -363,40 +405,9 @@
 
                             <div class="modal-footer">
                                 <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <button type="submit" class="btn btn-primary">Add</button>
+                                <button type="submit" class="btn btn-primary">Add Today Meal</button>
                             </div>
                         </form>
-                    </div>
-                </div>
-            </div>
-
-
-
-            <div class="modal fade" id="restockModal" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog modal-sm modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-body">
-                            <form id="restockForm" action="{{ route('vendor.food.stock.update') }}" method="POST">
-                                @csrf
-
-                                <input type="hidden" name="meal_id" id="restockMealId">
-
-                                {{-- <div class="mb-2">
-                                    <label class="form-label small">Current Stock</label>
-                                    <input type="text" class="form-control form-control-sm" id="currentStock" readonly>
-                                </div> --}}
-
-                                <div class="mb-4">
-                                    <label class="form-label small">Add Stock</label>
-                                    <input type="number" class="form-control form-control-sm" name="stock" min="1"
-                                        required>
-                                </div>
-
-                                <button type="submit" class="btn btn-primary btn-sm w-100">
-                                    Update Stock
-                                </button>
-                            </form>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -487,25 +498,26 @@
 
             modalEl.addEventListener('shown.bs.modal', function() {
 
-                if (!$('.chosen-select').data('chosen')) {
-                    $('.chosen-select').chosen({
+                if (!$('.select2').hasClass('select2-hidden-accessible')) {
+                    $('.select2').select2({
+                        theme: 'bootstrap-5',
                         width: '100%',
-                        placeholder_text_single: 'Select Food'
+                        placeholder: 'Select Food',
+                        dropdownParent: $('#addCategoryModal')
                     });
                 }
             });
-
             modalEl.addEventListener('hidden.bs.modal', function() {
-
-                if ($('.chosen-select').data('chosen')) {
-                    $('.chosen-select').chosen('destroy');
-                }
+                $('.select2').each(function() {
+                    if ($(this).data('select2')) {
+                        $(this).select2('destroy');
+                    }
+                });
 
                 const form = document.getElementById('todayMealForm');
                 if (form) {
                     form.reset();
                 }
-
                 $('.error-text').text('');
                 $('.form-control, .form-select').removeClass('is-invalid');
             });
@@ -524,14 +536,11 @@
                     data: $(form).serialize(),
 
                     success: function(res) {
-
                         modal.hide();
-
                         location.reload();
                     },
 
                     error: function(xhr) {
-
                         if (xhr.status === 422) {
                             const errors = xhr.responseJSON.errors;
 
@@ -546,6 +555,7 @@
 
         });
     </script>
+
 
 
     <script>
@@ -654,5 +664,41 @@
             });
 
         });
+    </script>
+
+
+    <script>
+        $(document).ready(function() {
+
+            $('#selectAll').on('change', function() {
+                $('.order-checkbox').prop('checked', this.checked);
+                toggleBulkActions();
+            });
+
+            $(document).on('change', '.order-checkbox', function() {
+                toggleBulkActions();
+            });
+
+            function toggleBulkActions() {
+                let checkedCount = $('.order-checkbox:checked').length;
+                $('#bulkActions').toggleClass('d-none', checkedCount === 0);
+            }
+
+        });
+
+        function bulkSubmit(status) {
+
+            let ids = $('.order-checkbox:checked').map(function() {
+                return this.value;
+            }).get();
+
+            if (ids.length === 0) return;
+
+            if (!confirm('Are you sure you want to update selected orders?')) return;
+
+            $('#bulkStatus').val(status);
+            $('#bulkOrderIds').val(ids.join(','));
+            $('#bulkForm').submit();
+        }
     </script>
 @endsection

@@ -10,6 +10,10 @@
 <!-- Chosen_v1 -->
 <link type="text/css" href="{{ asset('backend/vendor/chosen_v1.8.7/chosen.bootstrap.min.css') }}" rel="stylesheet">
 
+<!-- Select2 -->
+<link type="text/css" href="{{ asset('backend/vendor/select2/select2.min.css') }}" rel="stylesheet">
+<link type="text/css" href="{{ asset('backend/vendor/select2/select2-bootstrap-5-theme.min.css') }}" rel="stylesheet">
+
 
 <!-- Bootstrap Icon -->
 <link type="text/css" href="{{ asset('backend/vendor/bootstrap-icons/bootstrap-icons.min.css') }}" rel="stylesheet">

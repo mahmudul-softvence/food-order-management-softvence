@@ -83,17 +83,33 @@
                         </td>
 
                         <td>
-                            @if ($item->todayMeal)
-                                <span class="badge bg-primary me-1">{{ __('foods.today') }} •
-                                    ${{ $item->todayMeal->price }}</span>
-                                <span class="badge bg-secondary">{{ $item->todayMeal->category->name }}</span>
+                            @php
+                                $todayMeals = $item->todayMeals->filter(function ($meal) {
+                                    return $meal->created_at->isToday();
+                                });
+                            @endphp
+
+                            @if ($todayMeals->isNotEmpty())
+                                @foreach ($todayMeals as $todayMeal)
+                                    <div class="mb-1">
+                                        <span class="badge bg-primary me-1">
+                                            {{ __('foods.today') }} • ${{ $todayMeal->price }}
+                                        </span>
+                                        <span class="badge bg-secondary">
+                                            {{ $todayMeal->category->name }}
+                                        </span>
+                                    </div>
+                                @endforeach
                             @else
                                 <button class="btn btn-xs rounded-1 btn-info" data-bs-toggle="modal"
                                     data-bs-target="#todayMealModal" data-food-id="{{ $item->id }}">
-                                    <i class="bi bi-check-circle me-1"></i> {{ __('foods.set_today_meal') }}
+                                    <i class="bi bi-check-circle me-1"></i>
+                                    {{ __('foods.set_today_meal') }}
                                 </button>
                             @endif
                         </td>
+
+
 
                         <td>
                             @can('vendor.food.edit')
@@ -142,18 +158,19 @@
                         <div class="modal-body border-0">
                             <div class="mb-3">
                                 <label class="form-label">{{ __('foods.food_category') }}</label>
-                                <select class="form-select" name="food_category_id">
-                                    <option selected disabled>
-                                        {{ __('foods.select_one') }}
-                                    </option>
+
+                                <select class="form-select select2" name="food_category_id[]" multiple
+                                    data-placeholder="{{ __('foods.select_one') }}">
                                     @foreach ($food_categories as $food_category)
                                         <option value="{{ $food_category->id }}">
                                             {{ $food_category->name }}
                                         </option>
                                     @endforeach
                                 </select>
+
                                 <small class="text-danger error-food_category_id"></small>
                             </div>
+
 
                             <div class="mb-3">
                                 <label class="form-label">{{ __('foods.price') }}</label>
@@ -212,6 +229,15 @@
     <script>
         $(document).ready(function() {
 
+            $('#todayMealModal').on('shown.bs.modal', function() {
+                $('.select2').select2({
+                    theme: 'bootstrap-5',
+                    width: '100%',
+                    placeholder: "{{ __('foods.select_one') }}",
+                    dropdownParent: $('#todayMealModal')
+                });
+            });
+
             $('#todayMealModal').on('show.bs.modal', function(event) {
                 let button = $(event.relatedTarget);
                 let foodId = button.data('food-id');
@@ -220,6 +246,8 @@
 
                 $('.text-danger').text('');
                 $('#todayMealForm')[0].reset();
+
+                $('.select2').val(null).trigger('change');
             });
 
             $('#todayMealForm').on('submit', function(e) {
@@ -231,8 +259,8 @@
                     url: "{{ route('vendor.food.set_today_meal') }}",
                     type: "POST",
                     data: formData,
-                    success: function(response) {
 
+                    success: function(response) {
                         if (response.status === 'success') {
                             Swal.fire({
                                 icon: 'success',
@@ -246,10 +274,10 @@
                             location.reload();
                         }
                     },
+
                     error: function(xhr) {
                         if (xhr.status === 422) {
                             let errors = xhr.responseJSON.errors;
-
                             $('.text-danger').text('');
 
                             $.each(errors, function(key, value) {

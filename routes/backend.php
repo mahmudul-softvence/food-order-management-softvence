@@ -28,6 +28,9 @@ Route::group(
             Route::get('dashboard', [DashboardController::class, 'index'])
                 ->name('dashboard')->middleware('permission:dashboard');
 
+            Route::post('vendor/orders/bulk-status', [DashboardController::class, 'bulkStatus'])
+                ->name('vendor.order.bulkStatus');
+
             // Admin Settings
             Route::middleware(['permission:settings.view'])->group(function () {
 
@@ -157,7 +160,6 @@ Route::group(
                     ->name('vendor.order.markPaid');
 
                 Route::get('order/details', [VendorOrderController::class, 'orderDetails'])
-                    ->middleware('permission:vendor.order.status.details')
                     ->name('vendor.order.details');
 
                 Route::get('orders/export/{order_status}', [VendorOrderController::class, 'exportMealPdf'])

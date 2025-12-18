@@ -11,6 +11,7 @@
  <script src="{{ asset('backend/vendor/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
  <script src="{{ asset('backend/vendor/chosen_v1.8.7/chosen.jquery.js') }}"></script>
+ <script src="{{ asset('backend/vendor/select2/select2.min.js') }}"></script>
  <script src="{{ asset('backend/vendor/notyf/notyf.min.js') }}"></script>
  <script src="{{ asset('backend/vendor/simplebar/dist/simplebar.min.js') }}"></script>
  <script src="{{ asset('backend/assets/js/volt.js') }}"></script>
@@ -24,6 +25,7 @@
          })
      });
  </script>
+
 
 
  @yield('script')

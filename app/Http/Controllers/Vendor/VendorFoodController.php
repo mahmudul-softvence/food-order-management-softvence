@@ -164,10 +164,11 @@ class VendorFoodController extends Controller
     public function set_today_meal(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'food_id'           => 'required|exists:food,id',
-            'food_category_id'  => 'required|exists:food_categories,id',
-            'price'             => 'required|numeric|min:0',
-            'stock'             => 'required|integer|min:1',
+            'food_id'               => 'required|exists:food,id',
+            'food_category_id'      => 'required|array|min:1',
+            'food_category_id.*'    => 'exists:food_categories,id',
+            'price'                 => 'required|numeric|min:0',
+            'stock'                 => 'required|integer|min:1',
         ]);
 
         if ($validator->fails()) {
@@ -176,13 +177,23 @@ class VendorFoodController extends Controller
             ], 422);
         }
 
-        TodayMeal::create($validator->validated());
+        $data = $validator->validated();
+
+        foreach ($data['food_category_id'] as $categoryId) {
+            TodayMeal::create([
+                'food_id'          => $data['food_id'],
+                'food_category_id' => $categoryId,
+                'price'            => $data['price'],
+                'stock'            => $data['stock'],
+            ]);
+        }
 
         return response()->json([
             'status'  => 'success',
             'message' => 'Today meal set successfully'
         ]);
     }
+
 
     public function restock_today_meal(Request $request)
     {

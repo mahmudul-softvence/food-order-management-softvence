@@ -75,8 +75,10 @@
                         $available = $meal->stock - $meal->order_count;
 
                         $isOrdered = $orders
+                            ->where('user_id', auth()->id())
                             ->where('food_id', $meal->food_id)
                             ->where('created_at', '>=', \Carbon\Carbon::today())
+                            ->where('food_category_id', $food_category_id)
                             ->isNotEmpty();
                     @endphp
 
@@ -120,6 +122,7 @@
                                             <div class="col-md-6">
                                                 <button type="button" class="btn btn-gray-800 w-100 orderBtn"
                                                     data-meal_id="{{ $meal->id }}" data-id="{{ $meal->food_id }}"
+                                                    data-category="{{ $meal->food_category_id }}"
                                                     data-vendor="{{ $meal->food->user_id }}"
                                                     data-price="{{ $meal->price }}" data-name="{{ $meal->food->name }}"
                                                     {{ $available <= 0 ? 'disabled' : '' }} data-bs-toggle="modal"
@@ -165,6 +168,7 @@
 
                     <input type="hidden" name="food_id" id="food_id">
                     <input type="hidden" name="vendor_id" id="vendor_id">
+                    <input type="hidden" name="food_category_id" id="food_category_id">
                     <input type="hidden" name="price" id="price">
                     <input type="hidden" name="total" id="total_input">
                     <input type="hidden" name="quantity" id="quantity_input">
@@ -220,6 +224,7 @@
                 price = $(this).data('price');
 
                 $('#food_id').val($(this).data('id'));
+                $('#food_category_id').val($(this).data('category'));
                 $('#meal_id').val($(this).data('meal_id'));
                 $('#vendor_id').val($(this).data('vendor'));
                 $('#price').val(price);

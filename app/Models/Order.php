@@ -16,7 +16,8 @@ class Order extends Model
         'status',
         'payment_status',
         'note',
-        'today_meal_id'
+        'today_meal_id',
+        'food_category_id'
     ];
 
     public function user()

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('vendor_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('food_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('food_category_id')->constrained()->cascadeOnDelete();
             $table->foreignId('today_meal_id')->constrained('today_meals')->cascadeOnDelete();
 
             $table->integer('quantity')->default(1);
