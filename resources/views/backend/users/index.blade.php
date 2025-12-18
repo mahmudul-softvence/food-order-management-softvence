@@ -132,24 +132,31 @@
 
 
                         <td>
-                            <div class="btn-group btn-group-sm">
-                                <a href="javascript:void(0)" class="btn btn-gray-700 viewUser"
-                                    data-id="{{ $user->id }}">
-                                    <i class="bi bi-eye"></i>
+                            <a href="javascript:void(0)" class="btn btn-sm btn-gray-700 viewUser"
+                                data-id="{{ $user->id }}">
+                                <i class="bi bi-eye"></i>
+                            </a>
+
+                            @can('user.edit')
+                                <a href="{{ route('users.edit', $user->id) }}"
+                                    class="btn btn-sm mx-2 btn-secondary text-white">
+                                    <i class="bi bi-pencil"></i>
                                 </a>
+                            @endcan
 
-                                @can('user.edit')
-                                    <a href="{{ route('users.edit', $user->id) }}" class="btn btn-warning text-white">
-                                        <i class="bi bi-pencil"></i>
-                                    </a>
-                                @endcan
-
-                                @can('user.delete')
-                                    <button class="btn btn-danger">
+                            @can('user.delete')
+                                @if (!($user->id == auth()->id()))
+                                    <a href="#" class="btn btn-sm btn-danger" onclick="deleteUser({{ $user->id }})">
                                         <i class="bi bi-trash"></i>
-                                    </button>
-                                @endcan
-                            </div>
+                                    </a>
+
+                                    <form id="delete-form-{{ $user->id }}" action="{{ route('users.delete', $user->id) }}"
+                                        method="POST" class="d-none">
+                                        @csrf
+                                        @method('DELETE')
+                                    </form>
+                                @endif
+                            @endcan
 
                         </td>
                     </tr>
@@ -256,5 +263,25 @@
                 }
             });
         });
+    </script>
+
+
+    <script>
+        function deleteUser(id) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Deleting this user cannot be undone.",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "Cancel"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('delete-form-' + id).submit();
+                }
+            });
+        }
     </script>
 @endsection

@@ -114,6 +114,19 @@ class UserController extends Controller
     }
 
 
+
+    public function destroy(User $user)
+    {
+        if ($user->id === auth()->id()) {
+            return redirect()->route('users')->with('error', 'You cannot delete your own account.');
+        }
+
+        $user->delete();
+
+        return redirect()->route('users')->with('success', 'User deleted successfully!');
+    }
+
+
     public function changeStatus($id)
     {
         if (!auth()->user()->hasRole('admin')) {

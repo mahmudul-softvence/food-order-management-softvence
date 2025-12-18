@@ -19,7 +19,7 @@
             <small>Add a new team to group users.</small>
         </div>
 
-        <a href="{{ route('teams') }}" class="btn btn-sm btn-gray-800">
+        <a href="{{ route('teams') }}" class="btn btn-gray-800">
             <i class="fas fa-arrow-left me-2"></i> Back
         </a>
     </div>

@@ -44,7 +44,6 @@
                                 <input type="number" name="phone" value="{{ old('phone', $user->phone) }}"
                                     class="form-control @error('phone') is-invalid @enderror">
                                 @error('phone')
-                                    <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
 

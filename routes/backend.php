@@ -84,6 +84,9 @@ Route::group(
                 ->middleware('permission:user.edit')
                 ->name('users.update');
 
+            Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.delete');
+
+
             Route::post('users/update/status/{id}', [UserController::class, 'changeStatus'])
                 ->name('users.status');
 

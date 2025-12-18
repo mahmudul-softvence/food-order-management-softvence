@@ -82,17 +82,15 @@
                                     </td>
 
                                     <td>
-                                        <div class="btn-group btn-group-sm">
-                                            <a href="{{ route('teams.edit', $team->id) }}"
-                                                class="btn btn-warning text-white">
-                                                <i class="bi bi-pencil"></i>
-                                            </a>
+                                        <a href="{{ route('teams.edit', $team->id) }}"
+                                            class="btn btn-sm btn-secondary text-white me-2">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
 
-                                            <a href="#" class="btn btn-danger"
-                                                onclick="deleteTeam({{ $team->id }})">
-                                                <i class="bi bi-trash"></i>
-                                            </a>
-                                        </div>
+                                        <a href="#" class="btn btn-sm btn-danger"
+                                            onclick="deleteTeam({{ $team->id }})">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
 
 
                                         <form id="delete-form-{{ $team->id }}"
@@ -128,7 +126,7 @@
         function deleteTeam(id) {
             Swal.fire({
                 title: "Are you sure?",
-                text: "This action cannot be undone!",
+                text: "Deleting this team will also delete all users.",
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#d33",
