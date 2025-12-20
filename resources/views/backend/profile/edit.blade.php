@@ -6,168 +6,164 @@
             <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
                 <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
                     <li class="breadcrumb-item"><a href="#"><i class="bi bi-house-door fs-6"></i></a></li>
-                    <li class="breadcrumb-item active">Profile</li>
+                    <li class="breadcrumb-item active">{{ __('profile.edit_profile') }}</li>
                 </ol>
             </nav>
-            <h2 class="h4">Edit Profile</h2>
-            <small class="text-muted">Update your personal details & password</small>
+            <h2 class="h4">{{ __('profile.edit_profile') }}</h2>
+            <small class="text-muted">{{ __('profile.update_details') }}</small>
         </div>
     </div>
 
-    <div class="row">
+    <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
+        @csrf
+        @method('PUT')
 
-        <div class="col-md-8">
-            <div class="card card-body border-0 shadow mb-4">
-                <h2 class="h5 mb-4">General information</h2>
-                <form>
+        <div class="row">
+            <div class="col-md-7">
+                <div class="card card-body border-0 shadow mb-4">
+                    <h2 class="h5 mb-4">{{ __('profile.general_information') }}</h2>
+
                     <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <div>
-                                <label for="first_name">First Name</label>
-                                <input class="form-control" id="first_name" type="text"
-                                    placeholder="Enter your first name" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <div>
-                                <label for="last_name">Last Name</label>
-                                <input class="form-control" id="last_name" type="text" placeholder="Also your last name"
-                                    required>
-                            </div>
+                        <div class="col-md-12 mb-3">
+                            <label for="name">{{ __('profile.name') }}</label>
+                            <input class="form-control @error('name') is-invalid @enderror" id="name" name="name"
+                                type="text" placeholder="{{ __('profile.name') }}" value="{{ old('name', $user->name) }}"
+                                required>
+                            @error('name')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
                         </div>
                     </div>
-                    <div class="row align-items-center">
-                        <div class="col-md-6 mb-3">
-                            <label for="birthday">Birthday</label>
-                            <div class="input-group">
-                                <span class="input-group-text">
-                                    <svg class="icon icon-xs" fill="currentColor" viewBox="0 0 20 20"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd"
-                                            d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                                            clip-rule="evenodd"></path>
-                                    </svg>
-                                </span>
-                                <input data-datepicker="" class="form-control" id="birthday" type="text"
-                                    placeholder="dd/mm/yyyy" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="gender">Gender</label>
-                            <select class="form-select mb-0" id="gender" aria-label="Gender select example">
-                                <option selected>Gender</option>
-                                <option value="1">Female</option>
-                                <option value="2">Male</option>
-                            </select>
-                        </div>
-                    </div>
+
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <div class="form-group">
-                                <label for="email">Email</label>
-                                <input class="form-control" id="email" type="email" placeholder="name@company.com"
-                                    required>
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <div class="form-group">
-                                <label for="phone">Phone</label>
-                                <input class="form-control" id="phone" type="number" placeholder="+12-345 678 910"
-                                    required>
-                            </div>
-                        </div>
-                    </div>
-                    <h2 class="h5 my-4">Password</h2>
-                    <div class="row">
-                        <div class="col-sm-6 mb-3">
-                            <div class="form-group">
-                                <label for="new_password">New Password</label>
-                                <input class="form-control" id="new_password" type="password" name="password"
-                                    placeholder="Enter new password">
-                            </div>
+                            <label for="phone">{{ __('profile.phone') }}</label>
+                            <input class="form-control @error('phone') is-invalid @enderror" id="phone" name="phone"
+                                type="text" placeholder="{{ __('profile.phone') }}"
+                                value="{{ old('phone', $user->phone) }}" required>
+                            @error('phone')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
                         </div>
 
-                        <div class="col-sm-6 mb-3">
-                            <div class="form-group">
-                                <label for="confirm_password">Confirm Password</label>
-                                <input class="form-control" id="confirm_password" type="password"
-                                    name="password_confirmation" placeholder="Re-enter new password">
+                        @if ($user->hasRole(['employee', 'admin', 'office_staff']))
+                            <div class="col-md-6 mb-3">
+                                <label for="employee_number">{{ __('profile.employee_number') }}</label>
+                                <input class="form-control @error('employee_number') is-invalid @enderror"
+                                    id="employee_number" name="employee_number" type="text"
+                                    value="{{ old('employee_number', $user->employee_number) }}">
+                                @error('employee_number')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
                             </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="team_id">{{ __('profile.team') }}</label>
+                                <select name="team_id" id="team_id" class="form-select">
+                                    <option value="">{{ __('profile.select_one') }}</option>
+                                    @foreach ($teams as $team)
+                                        <option @if ($team->id == $user->team_id) selected @endif
+                                            value="{{ $team->id }}">{{ $team->name }}</option>
+                                    @endforeach
+                                </select>
+                                @error('team_id')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="floor">{{ __('profile.floor') }}</label>
+                                <input class="form-control @error('floor') is-invalid @enderror" id="floor"
+                                    name="floor" type="text" value="{{ old('floor', $user->floor) }}">
+                                @error('floor')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="row">{{ __('profile.row') }}</label>
+                                <input class="form-control @error('row') is-invalid @enderror" id="row" name="row"
+                                    type="text" value="{{ old('row', $user->row) }}">
+                                @error('row')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="seat_number">{{ __('profile.seat_number') }}</label>
+                                <input class="form-control @error('seat_number') is-invalid @enderror" id="seat_number"
+                                    name="seat_number" type="text" value="{{ old('seat_number', $user->seat_number) }}">
+                                @error('seat_number')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+                        @elseif ($user->hasRole(['vendor']))
+                            <div class="col-md-6 mb-3">
+                                <label for="nid">{{ __('profile.nid_number') }}</label>
+                                <input class="form-control @error('nid') is-invalid @enderror" id="nid" name="nid"
+                                    type="text" value="{{ old('nid', $user->nid) }}">
+                                @error('nid')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+                        @endif
+                    </div>
+
+                    <h2 class="h5 my-4">{{ __('profile.password') }}</h2>
+                    <div class="row">
+                        <div class="col-sm-6 mb-3">
+                            <label for="password">{{ __('profile.password') }}</label>
+                            <input class="form-control @error('password') is-invalid @enderror" id="password"
+                                name="password" type="password" placeholder="{{ __('profile.password') }}">
+                            @error('password')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+                        <div class="col-sm-6 mb-3">
+                            <label for="password_confirmation">{{ __('profile.confirm_password') }}</label>
+                            <input class="form-control" id="password_confirmation" name="password_confirmation"
+                                type="password" placeholder="{{ __('profile.confirm_password') }}">
                         </div>
                     </div>
 
                     <div class="mt-3">
-                        <button class="btn btn-gray-800 mt-2 animate-up-2" type="submit">Save all</button>
+                        <button class="btn btn-gray-800 mt-2 animate-up-2" type="submit">
+                            <i class="bi bi-save me-1"></i> {{ __('profile.save_all') }}
+                        </button>
                     </div>
-                </form>
-            </div>
-        </div>
 
-
-
-        <div class="col-md-4">
-            <div class="card card-body border-0 shadow mb-4">
-                <h2 class="h5 mb-4">Select profile photo</h2>
-                <div class="d-flex align-items-center">
-                    <div class="me-3">
-                        <img class="rounded avatar-xl" src="{{ asset('backend/assets/img/team/profile-picture-3.jpg') }}"
-                            alt="change avatar">
-                    </div>
-                    <div class="file-field">
-                        <div class="d-flex justify-content-xl-center ms-xl-3">
-                            <div class="d-flex">
-                                <svg class="icon text-gray-500 me-2" fill="currentColor" viewBox="0 0 20 20"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd"
-                                        d="M8 4a3 3 0 00-3 3v4a5 5 0 0010 0V7a1 1 0 112 0v4a7 7 0 11-14 0V7a5 5 0 0110 0v4a3 3 0 11-6 0V7a1 1 0 012 0v4a1 1 0 102 0V7a3 3 0 00-3-3z"
-                                        clip-rule="evenodd"></path>
-                                </svg>
-                                <input type="file">
-                                <div class="d-md-block text-left">
-                                    <div class="fw-normal text-dark mb-1">Choose Image</div>
-                                    <div class="text-muted small">JPG, GIF or PNG. Max size of 800K</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mt-4">
-                    <button class="btn btn-primary">Upload Image</button>
                 </div>
             </div>
 
+            <div class="col-md-5">
+                <div class="card card-body border-0 shadow mb-4">
+                    <h2 class="h5 mb-4">{{ __('profile.profile_photo') }}</h2>
+                    <input type="file" name="profile_image" class="dropify" data-default-file="{{ $user->avater }}"
+                        data-allowed-file-extensions="jpg png jpeg webp" data-max-file-size="2M" />
 
-            <div class="card card-body border-0 shadow mb-4">
-                <h2 class="h5 mb-4">Select Cover photo</h2>
-                <div class="d-flex align-items-center">
-                    <div class="me-3">
-                        <img class="rounded avatar-xl" src="{{ asset('backend/assets/img/team/profile-picture-4.jpg') }}"
-                            alt="change avatar">
-                    </div>
-                    <div class="file-field">
-                        <div class="d-flex justify-content-xl-center ms-xl-3">
-                            <div class="d-flex">
-                                <svg class="icon text-gray-500 me-2" fill="currentColor" viewBox="0 0 20 20"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd"
-                                        d="M8 4a3 3 0 00-3 3v4a5 5 0 0010 0V7a1 1 0 112 0v4a7 7 0 11-14 0V7a5 5 0 0110 0v4a3 3 0 11-6 0V7a1 1 0 012 0v4a1 1 0 102 0V7a3 3 0 00-3-3z"
-                                        clip-rule="evenodd"></path>
-                                </svg>
-                                <input type="file">
-                                <div class="d-md-block text-left">
-                                    <div class="fw-normal text-dark mb-1">Choose Cover Image</div>
-                                    <div class="text-muted small">JPG, GIF or PNG. Max size of 800K</div>
-                                </div>
-                            </div>
+                    @if ($user->hasRole('vendor'))
+                        <h2 class="h5 my-4">{{ __('profile.documents') }}</h2>
+
+                        <div class="mb-3">
+                            <label for="nid_image">{{ __('profile.nid_image') }}</label>
+                            <input type="file" name="nid_image" class="dropify"
+                                data-default-file="{{ $user->nid_image }}">
                         </div>
-                    </div>
-                </div>
 
-                <div class="mt-4">
-                    <button class="btn btn-primary">Upload Image</button>
+                        <div class="mb-3">
+                            <label for="trade_licence">{{ __('profile.trade_licence') }}</label>
+                            <input type="file" name="trade_licence" class="dropify"
+                                data-default-file="{{ $user->trade_licence }}">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="visiting_card">{{ __('profile.visiting_card') }}</label>
+                            <input type="file" name="visiting_card" class="dropify"
+                                data-default-file="{{ $user->visiting_card }}">
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
-    </div>
+    </form>
 @endsection

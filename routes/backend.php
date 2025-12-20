@@ -42,6 +42,9 @@ Route::group(
 
                 Route::get('settings/contact', [SettingsController::class, 'contact'])
                     ->name('settings.contact');
+
+                Route::post('settings/update', [SettingsController::class, 'update'])
+                    ->name('settings.update');
             });
 
 
@@ -49,6 +52,10 @@ Route::group(
             Route::get('profile', [ProfileController::class, 'index'])
                 ->middleware('permission:profile.update')
                 ->name('profile');
+
+            Route::put('profile/update', [ProfileController::class, 'update'])
+                ->middleware('permission:profile.update')
+                ->name('profile.update');
 
             // Roles
             Route::get('roles', [RoleController::class, 'index'])
@@ -59,9 +66,22 @@ Route::group(
                 ->middleware('permission:role.create')
                 ->name('roles.create');
 
-            Route::get('roles/edit', [RoleController::class, 'edit'])
+            Route::post('roles/store', [RoleController::class, 'store'])
+                ->middleware('permission:role.create')
+                ->name('roles.store');
+
+            Route::get('roles/{id}/edit', [RoleController::class, 'edit'])
                 ->middleware('permission:role.edit')
                 ->name('roles.edit');
+
+            Route::put('roles/{id}', [RoleController::class, 'update'])
+                ->middleware('permission:role.edit')
+                ->name('roles.update');
+
+            Route::delete('roles/{id}', [RoleController::class, 'destroy'])
+                ->middleware('permission:role.delete')
+                ->name('roles.destroy');
+
 
             // Create User
             Route::get('users', [UserController::class, 'index'])
@@ -84,8 +104,13 @@ Route::group(
                 ->middleware('permission:user.edit')
                 ->name('users.update');
 
-            Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.delete');
+            Route::delete('users/{user}', [UserController::class, 'destroy'])->name('users.delete');
 
+            Route::get('users/login-as/{id}', [UserController::class, 'loginAs'])
+                ->name('users.loginAs');
+
+            Route::get('users/return-admin', [UserController::class, 'returnAdmin'])
+                ->name('users.returnAdmin');
 
             Route::post('users/update/status/{id}', [UserController::class, 'changeStatus'])
                 ->name('users.status');

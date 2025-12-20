@@ -65,22 +65,36 @@
                     </div>
 
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">{{ __('foods.start_time') }}</label>
-                        <input type="time" name="start_time" value="{{ old('start_time', $category->start_time) }}"
-                            class="form-control">
+                        <label class="form-label">
+                            {{ __('foods.start_time') }} <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-clock"></i></span>
+                            <input type="text" name="start_time"
+                                value="{{ old('start_time', isset($category) ? \Carbon\Carbon::parse($category->start_time)->format('h:i A') : '') }}"
+                                class="form-control timepicker" placeholder="Select start time">
+                        </div>
                         @error('start_time')
-                            <span class="text-danger small">{{ $message }}</span>
+                            <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
 
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">{{ __('foods.end_time') }}</label>
-                        <input type="time" name="end_time" value="{{ old('end_time', $category->end_time) }}"
-                            class="form-control">
+                        <label class="form-label">
+                            {{ __('foods.end_time') }} <span class="text-danger">*</span>
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-clock"></i></span>
+                            <input type="text" name="end_time"
+                                value="{{ old('end_time', isset($category) ? \Carbon\Carbon::parse($category->end_time)->format('h:i A') : '') }}"
+                                class="form-control timepicker" placeholder="Select end time">
+                        </div>
                         @error('end_time')
-                            <span class="text-danger small">{{ $message }}</span>
+                            <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
+
+
 
                     <div class="col-md-12 mb-3">
                         <label class="form-label">{{ __('foods.category_image') }}</label>

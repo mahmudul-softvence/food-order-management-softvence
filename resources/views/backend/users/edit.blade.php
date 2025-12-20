@@ -14,14 +14,14 @@
             <small>Update user information.</small>
         </div>
 
-        <a href="{{ route('users') }}" class="btn btn-sm btn-gray-800">
+        <a href="{{ route('users') }}" class="btn btn-gray-800 animate-up-2">
             <i class="fas fa-arrow-left me-2"></i> Back
         </a>
     </div>
 
     <div class="card shadow border-0 mb-4">
         <div class="card-body">
-            <form action="{{ route('users.update', $user->id) }}" method="POST">
+            <form action="{{ route('users.update', $user->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
 
@@ -44,6 +44,7 @@
                                 <input type="number" name="phone" value="{{ old('phone', $user->phone) }}"
                                     class="form-control @error('phone') is-invalid @enderror">
                                 @error('phone')
+                                    <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
 
@@ -51,22 +52,19 @@
                                 <label class="form-label">Role</label>
                                 <select name="role" id="role"
                                     class="form-select @error('role') is-invalid @enderror">
-                                    <option value="employee"
-                                        {{ old('role', $user->getRoleNames()->first()) == 'employee' ? 'selected' : '' }}>
-                                        Employee
-                                    </option>
-                                    <option value="admin"
-                                        {{ old('role', $user->getRoleNames()->first()) == 'admin' ? 'selected' : '' }}>Admin
-                                    </option>
-                                    <option value="vendor"
-                                        {{ old('role', $user->getRoleNames()->first()) == 'vendor' ? 'selected' : '' }}>
-                                        Vendor
-                                    </option>
+                                    <option value="">Select Role</option>
+                                    @foreach ($roles as $role)
+                                        <option value="{{ $role->name }}"
+                                            {{ old('role', isset($user) ? $user->getRoleNames()->first() : '') == $role->name ? 'selected' : '' }}>
+                                            {{ ucfirst($role->name) }}
+                                        </option>
+                                    @endforeach
                                 </select>
                                 @error('role')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
+
 
                             <div class="col-md-12 mb-3">
                                 <label class="form-label">New Password (optional)</label>
@@ -80,29 +78,24 @@
 
                             <div class="col-md-12 mb-3">
                                 <label class="form-label">Confirm Password</label>
-                                <input type="password" name="password_confirmation" class="form-control"
-                                    placeholder="Re-enter password">
+                                <input type="password" name="password_confirmation" class="form-control">
                             </div>
 
                         </div>
                     </div>
 
-                    <div class="col-md-6" id="vendorSection">
+                    <div class="col-md-6" id="nonVendorSection">
                         <div class="row">
 
                             <div class="col-md-12 mb-3">
                                 <label class="form-label">Employee Number</label>
                                 <input type="text" name="employee_number"
-                                    value="{{ old('employee_number', $user->employee_number) }}"
-                                    class="form-control @error('employee_number') is-invalid @enderror">
-                                @error('employee_number')
-                                    <small class="text-danger">{{ $message }}</small>
-                                @enderror
+                                    value="{{ old('employee_number', $user->employee_number) }}" class="form-control">
                             </div>
 
                             <div class="col-md-12 mb-3">
                                 <label class="form-label">Team</label>
-                                <select name="team_id" class="form-select @error('team_id') is-invalid @enderror">
+                                <select name="team_id" class="form-select">
                                     <option value="">Select one</option>
                                     @foreach ($teams as $team)
                                         <option value="{{ $team->id }}"
@@ -111,35 +104,67 @@
                                         </option>
                                     @endforeach
                                 </select>
-                                @error('team_id')
-                                    <small class="text-danger">{{ $message }}</small>
-                                @enderror
                             </div>
 
                             <div class="col-md-12 mb-3">
                                 <label class="form-label">Floor</label>
                                 <input type="text" name="floor" value="{{ old('floor', $user->floor) }}"
-                                    class="form-control @error('floor') is-invalid @enderror">
-                                @error('floor')
-                                    <small class="text-danger">{{ $message }}</small>
-                                @enderror
+                                    class="form-control">
                             </div>
 
                             <div class="col-md-12 mb-3">
                                 <label class="form-label">Row</label>
                                 <input type="text" name="row" value="{{ old('row', $user->row) }}"
-                                    class="form-control @error('row') is-invalid @enderror">
-                                @error('row')
-                                    <small class="text-danger">{{ $message }}</small>
-                                @enderror
+                                    class="form-control">
                             </div>
 
                             <div class="col-md-12 mb-3">
                                 <label class="form-label">Seat Number</label>
                                 <input type="text" name="seat_number"
-                                    value="{{ old('seat_number', $user->seat_number) }}"
-                                    class="form-control @error('seat_number') is-invalid @enderror">
-                                @error('seat_number')
+                                    value="{{ old('seat_number', $user->seat_number) }}" class="form-control">
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="col-md-6" id="vendorSection" style="display:none;">
+                        <div class="row">
+
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label">NID Number</label>
+                                <input type="text" name="nid" value="{{ old('nid', $user->nid ?? '') }}"
+                                    class="form-control @error('nid') is-invalid @enderror" placeholder="Vendor NID Number">
+                                @error('nid')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">NID Image</label>
+                                <input type="file" name="nid_image" class="dropify"
+                                    data-allowed-file-extensions="jpg jpeg png pdf" data-max-file-size="10M"
+                                    @if (isset($user->nid_image)) data-default-file="{{ asset($user->nid_image) }}" @endif>
+                                @error('nid_image')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Trade Licence</label>
+                                <input type="file" name="trade_licence" class="dropify"
+                                    data-allowed-file-extensions="jpg jpeg png pdf" data-max-file-size="10M"
+                                    @if (isset($user->trade_licence)) data-default-file="{{ asset($user->trade_licence) }}" @endif>
+                                @error('trade_licence')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Visiting Card</label>
+                                <input type="file" name="visiting_card" class="dropify"
+                                    data-allowed-file-extensions="jpg jpeg png pdf" data-max-file-size="10M"
+                                    @if (isset($user->visiting_card)) data-default-file="{{ asset($user->visiting_card) }}" @endif>
+                                @error('visiting_card')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
@@ -147,9 +172,10 @@
                         </div>
                     </div>
 
+
                 </div>
 
-                <button class="btn btn-primary mt-3">
+                <button class="btn btn-primary mt-3 animate-up-2">
                     <i class="fas fa-save me-2"></i> Update User
                 </button>
 
@@ -161,8 +187,17 @@
 @section('script')
     <script>
         function toggleVendor() {
-            $('#vendorSection').toggle($('#role').val() !== 'vendor');
+            let role = $('#role').val();
+
+            if (role === 'vendor') {
+                $('#vendorSection').show();
+                $('#nonVendorSection').hide();
+            } else {
+                $('#vendorSection').hide();
+                $('#nonVendorSection').show();
+            }
         }
+
         $('#role').on('change', toggleVendor);
         toggleVendor();
     </script>

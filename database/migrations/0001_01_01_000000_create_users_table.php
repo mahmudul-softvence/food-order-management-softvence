@@ -14,7 +14,19 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('email')->unique();
+            $table->string('email')->unique()->nullable();
+            $table->string('phone')->unique();
+            $table->string('employee_number')->nullable();
+            $table->unsignedBigInteger('team_id')->nullable();
+            $table->string('floor')->nullable();
+            $table->string('row')->nullable();
+            $table->string('seat_number')->nullable();
+            $table->string('nid')->nullable();
+            $table->string('nid_image')->nullable();
+            $table->string('trade_licence')->nullable();
+            $table->string('visiting_card')->nullable();
+            $table->string('avater')->nullable();
+            $table->boolean('status')->default(1);
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
@@ -43,7 +55,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('users');
-        Schema::dropIfExists('password_reset_tokens');
-        Schema::dropIfExists('sessions');
     }
 };

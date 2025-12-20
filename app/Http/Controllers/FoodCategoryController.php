@@ -34,11 +34,14 @@ class FoodCategoryController extends Controller
 
         $image = UploadHelper::handleUpload($request->file('image'), 'uploads/food_category/');
 
+        $startTime = date('H:i:s', strtotime($request->start_time));
+        $endTime   = date('H:i:s', strtotime($request->end_time));
+
         FoodCategory::create([
             'name'        => $request->name,
             'description' => $request->description,
-            'start_time'  => $request->start_time,
-            'end_time'    => $request->end_time,
+            'start_time'  => $startTime,
+            'end_time'    => $endTime,
             'status'      => $request->status,
             'image'       => $image,
         ]);
@@ -69,17 +72,21 @@ class FoodCategoryController extends Controller
 
         $image = UploadHelper::handleUpload($request->file('image'), 'uploads/food_category/', $category->image);
 
+        $startTime = date('H:i:s', strtotime($request->start_time));
+        $endTime   = date('H:i:s', strtotime($request->end_time));
+
         $category->update([
             'name'        => $request->name,
             'description' => $request->description,
-            'start_time'  => $request->start_time,
-            'end_time'    => $request->end_time,
+            'start_time'  => $startTime,
+            'end_time'    => $endTime,
             'status'      => $request->status,
             'image'       => $image,
         ]);
 
         return to_route('food_category')->with('success', 'Category Updated Successfully');
     }
+
 
     public function destroy($id)
     {

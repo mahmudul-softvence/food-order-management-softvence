@@ -15,11 +15,11 @@
                             </svg>
                         </a>
                     </li>
-                    <li class="breadcrumb-item active">Settings</li>
+                    <li class="breadcrumb-item active">{{ __('settings.settings') }}</li>
                 </ol>
             </nav>
-            <h2 class="h4">Site Settings</h2>
-            <small class="mb-0">Manage and track all primary settings here.</small>
+            <h2 class="h4">{{ __('settings.site_settings') }}</h2>
+            <small class="mb-0">{{ __('settings.manage_settings') }}</small>
         </div>
     </div>
 
@@ -27,34 +27,24 @@
         <div class="col-md-3">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="mb-3">Settings Menu</h5>
-                    <div class="nav-wrapper position-relative">
-                        <ul class="nav nav-pills square nav-fill flex-column vertical-tab">
-                            <li class="nav-item">
-                                <a class="btn btn-primary w-100 mb-3" href="{{ route('settings') }}">
-                                    <i class="bi bi-sliders me-2"></i>
-                                    General
-                                </a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a class="btn btn-outline-primary w-100 mb-3" href="{{ route('settings.logo') }}">
-                                    <i class="bi bi-image me-2"></i>
-                                    Logo & Favicon
-                                </a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a class="btn btn-outline-primary w-100 mb-3" href="{{ route('settings.contact') }}">
-                                    <i class="bi bi-telephone me-2"></i>
-                                    Contact Info
-                                </a>
-                            </li>
-
-                        </ul>
-
-
-                    </div>
+                    <h5 class="mb-3">{{ __('settings.menu') }}</h5>
+                    <ul class="nav nav-pills square nav-fill flex-column vertical-tab">
+                        <li class="nav-item">
+                            <a class="btn btn-primary w-100 mb-3" href="{{ route('settings') }}">
+                                <i class="bi bi-sliders me-2"></i> {{ __('settings.general') }}
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn btn-outline-primary w-100 mb-3" href="{{ route('settings.logo') }}">
+                                <i class="bi bi-image me-2"></i> {{ __('settings.logo_favicon') }}
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn btn-outline-primary w-100 mb-3" href="{{ route('settings.contact') }}">
+                                <i class="bi bi-telephone me-2"></i> {{ __('settings.contact_info') }}
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -62,31 +52,32 @@
         <div class="col-md-9">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">General</h4>
+                    <h4 class="card-title">{{ __('settings.general') }}</h4>
                 </div>
                 <div class="card-body">
-                    <form action="#" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('settings.update') }}" method="POST" enctype="multipart/form-data">
                         @csrf
 
                         <div class="mb-3">
-                            <label class="form-label">Site Name</label>
+                            <label class="form-label">{{ __('settings.site_name') }}</label>
                             <input type="text" name="site_name" class="form-control"
                                 value="{{ $setting->site_name ?? '' }}">
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Site Description</label>
+                            <label class="form-label">{{ __('settings.site_description') }}</label>
                             <textarea name="site_description" class="form-control" rows="3">{{ $setting->site_description ?? '' }}</textarea>
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Footer Text</label>
+                            <label class="form-label">{{ __('settings.footer_text') }}</label>
                             <input type="text" name="footer_text" class="form-control"
                                 value="{{ $setting->footer_text ?? '' }}">
                         </div>
 
-                        <button class="btn btn-primary mt-2" type="submit">Save
-                            Changes</button>
+                        <button class="btn btn-primary mt-2" type="submit">
+                            <i class="bi bi-save me-1"></i> {{ __('settings.save_changes') }}
+                        </button>
                     </form>
                 </div>
             </div>

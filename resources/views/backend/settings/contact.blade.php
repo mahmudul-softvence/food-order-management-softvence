@@ -15,46 +15,37 @@
                             </svg>
                         </a>
                     </li>
-                    <li class="breadcrumb-item active">Settings</li>
+                    <li class="breadcrumb-item active">{{ __('settings.settings') }}</li>
                 </ol>
             </nav>
-            <h2 class="h4">Site Settings</h2>
-            <small class="mb-0">Manage and track all primary settings here.</small>
+            <h2 class="h4">{{ __('settings.site_settings') }}</h2>
+            <small class="mb-0">{{ __('settings.manage_settings') }}</small>
         </div>
     </div>
 
     <div class="row">
+        {{-- Sidebar --}}
         <div class="col-md-3">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="mb-3">Settings Menu</h5>
-                    <div class="nav-wrapper position-relative">
-                        <ul class="nav nav-pills square nav-fill flex-column vertical-tab">
-                            <li class="nav-item">
-                                <a class="btn btn-outline-primary w-100 mb-3" href="{{ route('settings') }}">
-                                    <i class="bi bi-sliders me-2"></i>
-                                    General
-                                </a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a class="btn btn-outline-primary w-100 mb-3" href="{{ route('settings.logo') }}">
-                                    <i class="bi bi-image me-2"></i>
-                                    Logo & Favicon
-                                </a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a class="btn btn-primary w-100 mb-3" href="{{ route('settings.contact') }}">
-                                    <i class="bi bi-telephone me-2"></i>
-                                    Contact Info
-                                </a>
-                            </li>
-
-                        </ul>
-
-
-                    </div>
+                    <h5 class="mb-3">{{ __('settings.menu') }}</h5>
+                    <ul class="nav nav-pills square nav-fill flex-column vertical-tab">
+                        <li class="nav-item">
+                            <a class="btn btn-outline-primary w-100 mb-3" href="{{ route('settings') }}">
+                                <i class="bi bi-sliders me-2"></i> {{ __('settings.general') }}
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn btn-outline-primary w-100 mb-3" href="{{ route('settings.logo') }}">
+                                <i class="bi bi-image me-2"></i> {{ __('settings.logo_favicon') }}
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn btn-primary w-100 mb-3" href="{{ route('settings.contact') }}">
+                                <i class="bi bi-telephone me-2"></i> {{ __('settings.contact_info') }}
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -62,63 +53,65 @@
         <div class="col-md-9">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Contact Information</h4>
+                    <h4 class="card-title">{{ __('settings.contact_info') }}</h4>
                 </div>
                 <div class="card-body">
-                    <form action="#" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('settings.update') }}" method="POST" enctype="multipart/form-data">
                         @csrf
 
                         <div class="mb-3">
-                            <label class="form-label">Email Address</label>
+                            <label class="form-label">{{ __('settings.email') }}</label>
                             <input type="email" name="email" class="form-control" value="{{ $setting->email ?? '' }}">
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Phone Number</label>
+                            <label class="form-label">{{ __('settings.phone') }}</label>
                             <input type="text" name="phone" class="form-control" value="{{ $setting->phone ?? '' }}">
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Address</label>
+                            <label class="form-label">{{ __('settings.address') }}</label>
                             <textarea name="address" class="form-control" rows="3">{{ $setting->address ?? '' }}</textarea>
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Website</label>
-                            <input type="text" name="website" class="form-control" value="{{ $setting->website ?? '' }}">
+                            <label class="form-label">{{ __('settings.website') }}</label>
+                            <input type="text" name="website" class="form-control"
+                                value="{{ $setting->website ?? '' }}">
                         </div>
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">Facebook</label>
+                                <label class="form-label">{{ __('settings.facebook') }}</label>
                                 <input type="text" name="facebook" class="form-control"
                                     value="{{ $setting->facebook ?? '' }}">
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">Instagram</label>
+                                <label class="form-label">{{ __('settings.instagram') }}</label>
                                 <input type="text" name="instagram" class="form-control"
                                     value="{{ $setting->instagram ?? '' }}">
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">Twitter</label>
+                                <label class="form-label">{{ __('settings.twitter') }}</label>
                                 <input type="text" name="twitter" class="form-control"
                                     value="{{ $setting->twitter ?? '' }}">
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">LinkedIn</label>
+                                <label class="form-label">{{ __('settings.linkedin') }}</label>
                                 <input type="text" name="linkedin" class="form-control"
                                     value="{{ $setting->linkedin ?? '' }}">
                             </div>
                         </div>
 
-                        <button class="btn btn-primary mt-2" type="submit">Save Changes</button>
+                        <button class="btn btn-primary mt-2" type="submit">
+                            <i class="bi bi-save me-1"></i> {{ __('settings.save_changes') }}
+                        </button>
                     </form>
                 </div>
             </div>
         </div>
-
     </div>
 @endsection

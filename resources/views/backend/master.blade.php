@@ -18,6 +18,14 @@
         @include('backend.layout.header')
 
 
+        @if (session()->has('admin_id'))
+            <div class="alert alert-info text-center">
+                <a href="{{ route('users.returnAdmin') }}" class="btn btn-sm btn-primary me-3">Return to Admin</a>
+                You are logged in as another user.
+            </div>
+        @endif
+
+
         @yield('content')
 
 
@@ -25,10 +33,10 @@
 
     </main>
 
+    @include('backend.layout.toast')
+
 
     @include('backend.layout.script')
-
-
 
 </body>
 

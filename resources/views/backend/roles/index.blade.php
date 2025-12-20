@@ -75,15 +75,28 @@
                                     </th>
                                     <td>
                                         <div class="btn-group btn-group-sm">
-                                            <a href="{{ route('roles.edit') }}" class="btn btn-tertiary">
-                                                <i class="bi bi-pencil me-1"></i> Manage
-                                            </a>
+                                            @can('role.edit')
+                                                <a href="{{ route('roles.edit', $role->id) }}" class="btn btn-tertiary">
+                                                    <i class="bi bi-pencil me-1"></i> Manage
+                                                </a>
+                                            @endcan
 
-                                            <a href="#" class="btn btn-danger">
-                                                <i class="bi bi-trash"></i>
-                                            </a>
+                                            @can('role.delete')
+                                                <a class="btn btn-danger" onclick="confirmDelete({{ $role->id }})">
+                                                    <i class="bi bi-trash"></i>
+                                                </a>
+                                            @endcan
                                         </div>
+
+
+                                        <form id="delete-form-{{ $role->id }}"
+                                            action="{{ route('roles.destroy', $role->id) }}" method="POST"
+                                            style="display:none;">
+                                            @csrf
+                                            @method('DELETE')
+                                        </form>
                                     </td>
+
 
                                 </tr>
                             @endforeach
@@ -93,4 +106,24 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('script')
+    <script>
+        function confirmDelete(id) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this action!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#6c757d",
+                confirmButtonText: "Yes, delete it"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('delete-form-' + id).submit();
+                }
+            });
+        }
+    </script>
 @endsection

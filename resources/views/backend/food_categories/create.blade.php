@@ -35,7 +35,7 @@
                             {{ __('foods.category_name') }} <span class="text-danger">*</span>
                         </label>
                         <input type="text" name="name" value="{{ old('name') }}" class="form-control"
-                            placeholder="{{ __('foods.enter_category_name') }}" required>
+                            placeholder="{{ __('foods.enter_category_name') }}">
                         @error('name')
                             <small class="text-danger">{{ $message }}</small>
                         @enderror
@@ -45,7 +45,7 @@
                         <label class="form-label">
                             {{ __('foods.status') }} <span class="text-danger">*</span>
                         </label>
-                        <select name="status" class="form-select" required>
+                        <select name="status" class="form-select">
                             <option value="1" selected>{{ __('foods.active') }}</option>
                             <option value="0">{{ __('foods.inactive') }}</option>
                         </select>
@@ -66,8 +66,11 @@
                         <label class="form-label">
                             {{ __('foods.start_time') }} <span class="text-danger">*</span>
                         </label>
-                        <input type="time" name="start_time" value="{{ old('start_time') }}" class="form-control"
-                            required>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-clock"></i></span>
+                            <input type="text" name="start_time" value="{{ old('start_time') }}"
+                                class="form-control timepicker" placeholder="Select start time">
+                        </div>
                         @error('start_time')
                             <small class="text-danger">{{ $message }}</small>
                         @enderror
@@ -77,11 +80,16 @@
                         <label class="form-label">
                             {{ __('foods.end_time') }} <span class="text-danger">*</span>
                         </label>
-                        <input type="time" name="end_time" value="{{ old('end_time') }}" class="form-control" required>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-clock"></i></span>
+                            <input type="text" name="end_time" value="{{ old('end_time') }}"
+                                class="form-control timepicker" placeholder="Select end time">
+                        </div>
                         @error('end_time')
                             <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
+
 
                     <div class="col-md-12 mb-3">
                         <label class="form-label">{{ __('foods.category_image') }}</label>

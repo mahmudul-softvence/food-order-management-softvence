@@ -14,14 +14,14 @@
             <small>Add user to grow your application.</small>
         </div>
 
-        <a href="{{ route('users') }}" class="btn btn-sm btn-gray-800">
+        <a href="{{ route('users') }}" class="btn btn-gray-800 animate-up-2">
             <i class="fas fa-arrow-left me-2"></i> Back
         </a>
     </div>
 
     <div class="card shadow border-0 mb-4">
         <div class="card-body">
-            <form action="{{ route('users.store') }}" method="POST">
+            <form action="{{ route('users.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
                 <div class="row g-4">
@@ -52,15 +52,19 @@
                                 <label class="form-label">Role</label>
                                 <select class="form-select @error('role') is-invalid @enderror" name="role"
                                     id="role">
-                                    <option value="employee" {{ old('role') == 'employee' ? 'selected' : '' }}>Employee
-                                    </option>
-                                    <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
-                                    <option value="vendor" {{ old('role') == 'vendor' ? 'selected' : '' }}>Vendor</option>
+                                    <option value="">Select Role</option>
+                                    @foreach ($roles as $role)
+                                        <option value="{{ $role->name }}"
+                                            {{ old('role', isset($user) ? $user->getRoleNames()->first() : 'employee') == $role->name ? 'selected' : '' }}>
+                                            {{ ucfirst($role->name) }}
+                                        </option>
+                                    @endforeach
                                 </select>
                                 @error('role')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
+
 
                             <div class="col-md-12 mb-3">
                                 <label class="form-label">Password</label>
@@ -81,9 +85,8 @@
                         </div>
                     </div>
 
-                    <div class="col-md-6" id="vendorSection">
+                    <div class="col-md-6" id="nonVendorSection">
                         <div class="row">
-
                             <div class="col-md-12 mb-3">
                                 <label class="form-label">Employee Number</label>
                                 <input type="text" name="employee_number" value="{{ old('employee_number') }}"
@@ -136,13 +139,61 @@
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6" id="vendorSection" style="display:none;">
+                        <div class="row">
+
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label">NID Number</label>
+                                <input type="text" name="nid" value="{{ old('nid', $user->nid ?? '') }}"
+                                    class="form-control @error('nid') is-invalid @enderror"
+                                    placeholder="Vendor NID Number">
+                                @error('nid')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">NID Image</label>
+                                <input type="file" name="nid_image" class="dropify"
+                                    data-allowed-file-extensions="jpg jpeg png pdf" data-max-file-size="10M"
+                                    @if (isset($user->nid_image)) data-default-file="{{ asset($user->nid_image) }}" @endif>
+                                @error('nid_image')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Trade Licence</label>
+                                <input type="file" name="trade_licence" class="dropify"
+                                    data-allowed-file-extensions="jpg jpeg png pdf" data-max-file-size="10M"
+                                    @if (isset($user->trade_licence)) data-default-file="{{ asset($user->trade_licence) }}" @endif>
+                                @error('trade_licence')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Visiting Card</label>
+                                <input type="file" name="visiting_card" class="dropify"
+                                    data-allowed-file-extensions="jpg jpeg png pdf" data-max-file-size="10M"
+                                    @if (isset($user->visiting_card)) data-default-file="{{ asset($user->visiting_card) }}" @endif>
+                                @error('visiting_card')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
 
                         </div>
                     </div>
 
+
+
+
                 </div>
 
-                <button class="btn btn-primary mt-3">
+                <button class="btn btn-primary mt-3 animate-up-2">
                     <i class="fas fa-save me-2"></i> Save User
                 </button>
 
@@ -154,9 +205,19 @@
 @section('script')
     <script>
         function toggleVendor() {
-            $('#vendorSection').toggle($('#role').val() !== 'vendor');
+            var role = $('#role').val();
+
+            if (role === 'vendor') {
+                $('#vendorSection').show();
+                $('#nonVendorSection').hide();
+            } else {
+                $('#vendorSection').hide();
+                $('#nonVendorSection').show();
+            }
         }
+
         $('#role').on('change', toggleVendor);
+
         toggleVendor();
     </script>
 @endsection

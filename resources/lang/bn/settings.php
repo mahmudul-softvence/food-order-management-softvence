@@ -1,0 +1,25 @@
+<?php
+
+return [
+    'settings'        => 'সেটিংস',
+    'site_settings'   => 'সাইট সেটিংস',
+    'manage_settings' => 'এখান থেকে সমস্ত মূল সেটিংস পরিচালনা ও ট্র্যাক করুন।',
+    'menu'            => 'সেটিংস মেনু',
+    'general'         => 'সাধারণ',
+    'logo_favicon'    => 'লোগো & ফেভিকন',
+    'contact_info'    => 'যোগাযোগের তথ্য',
+    'site_name'       => 'সাইটের নাম',
+    'site_description' => 'সাইটের বর্ণনা',
+    'footer_text'     => 'ফুটার টেক্সট',
+    'email'           => 'ইমেইল ঠিকানা',
+    'phone'           => 'ফোন নম্বর',
+    'address'         => 'ঠিকানা',
+    'website'         => 'ওয়েবসাইট',
+    'facebook'        => 'ফেসবুক',
+    'instagram'       => 'ইনস্টাগ্রাম',
+    'twitter'         => 'টুইটার',
+    'linkedin'        => 'লিঙ্কডইন',
+    'save_changes'    => 'পরিবর্তন সংরক্ষণ করুন',
+    'site_logo'       => 'সাইট লোগো',
+    'favicon'         => 'ফেভিকন',
+];

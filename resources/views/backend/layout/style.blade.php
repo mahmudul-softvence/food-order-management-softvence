@@ -1,6 +1,12 @@
 <!-- Sweet Alert -->
 <link type="text/css" href="{{ asset('backend/vendor/sweetalert2/dist/sweetalert2.min.css') }}" rel="stylesheet">
 
+<!-- Dropify -->
+<link type="text/css" href="{{ asset('backend/vendor/dropify-master/dist/css/dropify.min.css') }}" rel="stylesheet">
+
+<!-- Timepicker -->
+<link type="text/css" href="{{ asset('backend/vendor/timepicker/jquery.timepicker.min.css') }}" rel="stylesheet">
+
 <!-- Fontawesome 5 -->
 <link type="text/css" href="{{ asset('backend/vendor/fontawesome/css/all.css') }}" rel="stylesheet">
 

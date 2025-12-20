@@ -22,7 +22,7 @@
         </div>
         @can('user.create')
             <div>
-                <a href="{{ route('users.create') }}" class="btn btn-primary">
+                <a href="{{ route('users.create') }}" class="btn btn-primary animate-up-2">
                     <i class="bi bi-plus-circle me-1"></i> Add User
                 </a>
             </div>
@@ -132,33 +132,58 @@
 
 
                         <td>
-                            <a href="javascript:void(0)" class="btn btn-sm btn-gray-700 viewUser"
-                                data-id="{{ $user->id }}">
-                                <i class="bi bi-eye"></i>
-                            </a>
+                            <div class="dropdown">
+                                <button class="btn btn-sm rounded-circle btn-outline-gray-700 dropdown-toggle"
+                                    type="button" id="actionDropdown{{ $user->id }}" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    <i class="bi bi-three-dots-vertical"></i>
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="actionDropdown{{ $user->id }}">
+                                    <li>
+                                        <a class="dropdown-item viewUser" href="javascript:void(0)"
+                                            data-id="{{ $user->id }}">
+                                            <i class="bi bi-eye me-2"></i> View
+                                        </a>
+                                    </li>
 
-                            @can('user.edit')
-                                <a href="{{ route('users.edit', $user->id) }}"
-                                    class="btn btn-sm mx-2 btn-secondary text-white">
-                                    <i class="bi bi-pencil"></i>
-                                </a>
-                            @endcan
+                                    @can('user.edit')
+                                        <li>
+                                            <a class="dropdown-item" href="{{ route('users.edit', $user->id) }}">
+                                                <i class="bi bi-pencil me-2"></i> Edit
+                                            </a>
+                                        </li>
+                                    @endcan
 
-                            @can('user.delete')
-                                @if (!($user->id == auth()->id()))
-                                    <a href="#" class="btn btn-sm btn-danger" onclick="deleteUser({{ $user->id }})">
-                                        <i class="bi bi-trash"></i>
-                                    </a>
+                                    @can('user.delete')
+                                        @if ($user->id != auth()->id())
+                                            <li>
+                                                <a class="dropdown-item text-danger" href="#"
+                                                    onclick="deleteUser({{ $user->id }})">
+                                                    <i class="bi bi-trash me-2"></i> Delete
+                                                </a>
+                                            </li>
+                                        @endif
+                                    @endcan
 
-                                    <form id="delete-form-{{ $user->id }}" action="{{ route('users.delete', $user->id) }}"
-                                        method="POST" class="d-none">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
-                                @endif
-                            @endcan
+                                    @if ($user->id != auth()->id())
+                                        <li>
+                                            <a class="dropdown-item text-warning"
+                                                href="{{ route('users.loginAs', $user->id) }}">
+                                                <i class="bi bi-mask me-2"></i> Login as User
+                                            </a>
+                                        </li>
+                                    @endif
+                                </ul>
+                            </div>
 
+                            <form id="delete-form-{{ $user->id }}" action="{{ route('users.delete', $user->id) }}"
+                                method="POST" class="d-none">
+                                @csrf
+                                @method('DELETE')
+                            </form>
                         </td>
+
+
                     </tr>
                 @endforeach
 

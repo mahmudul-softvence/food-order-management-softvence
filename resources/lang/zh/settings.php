@@ -1,0 +1,25 @@
+<?php
+
+return [
+    'settings'        => '设置',
+    'site_settings'   => '网站设置',
+    'manage_settings' => '在此管理和跟踪所有主要设置。',
+    'menu'            => '设置菜单',
+    'general'         => '常规',
+    'logo_favicon'    => 'Logo & Favicon',
+    'contact_info'    => '联系信息',
+    'site_name'       => '网站名称',
+    'site_description' => '网站描述',
+    'footer_text'     => '页脚文本',
+    'email'           => '电子邮件地址',
+    'phone'           => '电话号码',
+    'address'         => '地址',
+    'website'         => '网站',
+    'facebook'        => 'Facebook',
+    'instagram'       => 'Instagram',
+    'twitter'         => 'Twitter',
+    'linkedin'        => 'LinkedIn',
+    'save_changes'    => '保存更改',
+    'site_logo'       => '网站 Logo',
+    'favicon'         => 'Favicon',
+];

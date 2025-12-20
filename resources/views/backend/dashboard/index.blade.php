@@ -189,6 +189,12 @@
                                                     <i class="bi bi-check-circle me-2"></i>Delivered
                                                 </button>
                                             @endif
+
+                                            <form id="statusForm" action="{{ route('vendor.order.status.update', 'ID_HERE') }}"
+                                                method="POST" class="d-none">
+                                                @csrf
+                                                <input type="hidden" name="status" id="statusInput">
+                                            </form>
                                         </td>
                                     </tr>
                                 @endforeach

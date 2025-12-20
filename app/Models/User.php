@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
@@ -27,6 +28,10 @@ class User extends Authenticatable
         'floor',
         'row',
         'seat_number',
+        'nid',
+        'nid_image',
+        'trade_licence',
+        'visiting_card'
     ];
 
 
@@ -77,5 +82,34 @@ class User extends Authenticatable
     public function foods()
     {
         return $this->hasMany(Food::class);
+    }
+
+    public function getImage()
+    {
+        if ($this->image) {
+            return asset('nid_images/69460d36524751766198582.jpg' . $this->image);
+        }
+
+        return asset('images/default-food.png');
+    }
+
+    public function getAvaterAttribute($value)
+    {
+        return $value ? asset($value) : asset('backend/assets/img/default-avatar.png');
+    }
+
+    public function getNidImageAttribute($value)
+    {
+        return $value ? asset($value) : asset('backend/assets/img/default-file.png');
+    }
+
+    public function getTradeLicenceAttribute($value)
+    {
+        return $value ? asset($value) : asset('backend/assets/img/default-file.png');
+    }
+
+    public function getVisitingCardAttribute($value)
+    {
+        return $value ? asset($value) : asset('backend/assets/img/default-file.png');
     }
 }

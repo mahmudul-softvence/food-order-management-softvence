@@ -6,11 +6,11 @@
             <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
                 <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
                     <li class="breadcrumb-item">
-                        <a href="#">
+                        <a href="{{ route('roles') }}">
                             <i class="bi bi-house-door fs-6"></i>
                         </a>
                     </li>
-                    <li class="breadcrumb-item"><a href="#">Roles</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('roles') }}">Roles</a></li>
                     <li class="breadcrumb-item active">Edit Role</li>
                 </ol>
             </nav>
@@ -19,7 +19,7 @@
             <small class="mb-0">Update role name or modify assigned permissions.</small>
         </div>
 
-        <a href="#" class="btn btn-sm btn-gray-800">
+        <a href="{{ route('roles') }}" class="btn btn-gray-800">
             <i class="fas fa-arrow-left me-2"></i> Back
         </a>
     </div>
@@ -27,55 +27,53 @@
     <div class="card border-0 shadow mb-4">
         <div class="card-body">
 
-            <form action="" method="POST">
+            <form action="{{ route('roles.update', $role->id) }}" method="POST">
                 @csrf
                 @method('PUT')
 
                 <div class="row">
-
                     <div class="col-md-4 mb-3">
                         <label class="form-label">Role Name</label>
                         <input type="text" name="name" class="form-control" placeholder="Enter role name"
-                            value="Admin" required>
+                            value="{{ old('name', $role->name) }}" required>
                     </div>
 
                     <div class="col-md-8 mb-3">
                         <label class="form-label">Permissions</label>
-                        <div class="border rounded p-3" style="max-height:260px; overflow-y:auto;">
+                        <div class="border rounded p-4 permission-container">
 
-                            <div class="form-check mb-2">
-                                <input class="form-check-input" type="checkbox" name="permissions[]" id="p1" checked>
-                                <label class="form-check-label" for="p1">User Create</label>
+                            <div class="row g-4">
+                                @php
+                                    $groupedPermissions = $permissions->groupBy('group');
+                                @endphp
+
+                                @foreach ($groupedPermissions as $group => $perms)
+                                    <div class="col-md-6 mb-3">
+                                        <div class="border rounded p-4 h-100">
+                                            <h5 class="fw-bold text-primary mb-3">
+                                                <input type="checkbox" class="form-check-input select-group me-2"
+                                                    id="group-{{ $group }}">
+                                                <label class="form-check-label" for="group-{{ $group }}">
+                                                    {{ ucfirst($group) }}
+                                                </label>
+                                            </h5>
+
+                                            @foreach ($perms as $permission)
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input child-perm group-{{ $group }}"
+                                                        type="checkbox" name="permissions[]" id="perm{{ $permission->id }}"
+                                                        value="{{ $permission->name }}"
+                                                        {{ $role->hasPermissionTo($permission->name) ? 'checked' : '' }}>
+                                                    <label class="form-check-label" for="perm{{ $permission->id }}">
+                                                        {{ $permission->name }}
+                                                    </label>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endforeach
                             </div>
 
-                            <div class="form-check mb-2">
-                                <input class="form-check-input" type="checkbox" name="permissions[]" id="p2" checked>
-                                <label class="form-check-label" for="p2">User Edit</label>
-                            </div>
-
-                            <div class="form-check mb-2">
-                                <input class="form-check-input" type="checkbox" name="permissions[]" id="p3">
-                                <label class="form-check-label" for="p3">User Delete</label>
-                            </div>
-
-                            <div class="form-check mb-2">
-                                <input class="form-check-input" type="checkbox" name="permissions[]" id="p4" checked>
-                                <label class="form-check-label" for="p4">Food Manage</label>
-                            </div>
-
-                            <div class="form-check mb-2">
-                                <input class="form-check-input" type="checkbox" name="permissions[]" id="p5">
-                                <label class="form-check-label" for="p5">Orders View</label>
-                            </div>
-
-                            @for ($i = 6; $i <= 15; $i++)
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input" type="checkbox" name="permissions[]"
-                                        id="p{{ $i }}">
-                                    <label class="form-check-label" for="p{{ $i }}">Permission
-                                        {{ $i }}</label>
-                                </div>
-                            @endfor
 
                         </div>
                     </div>
@@ -89,4 +87,35 @@
 
         </div>
     </div>
+@endsection
+
+@section('script')
+    <script>
+        $(document).ready(function() {
+
+            $('.select-group').each(function() {
+                const group = $(this).attr('id').replace('group-', '');
+                const allChecked = $('.group-' + group).length === $('.group-' + group + ':checked').length;
+                $(this).prop('checked', allChecked);
+            });
+
+            $('.select-group').on('change', function() {
+                const group = $(this).attr('id').replace('group-', '');
+                $('.group-' + group).prop('checked', $(this).prop('checked'));
+            });
+
+            $('.child-perm').on('change', function() {
+                const classes = $(this).attr('class').split(/\s+/);
+                classes.forEach(function(cls) {
+                    if (cls.startsWith('group-')) {
+                        const group = cls.replace('group-', '');
+                        const allChecked = $('.group-' + group).length === $('.group-' + group +
+                            ':checked').length;
+                        $('#group-' + group).prop('checked', allChecked);
+                    }
+                });
+            });
+
+        });
+    </script>
 @endsection
