@@ -69,10 +69,10 @@
                             <label class="form-label">{{ __('settings.favicon') }}</label>
                             <input type="file" name="favicon" class="dropify"
                                 data-default-file="{{ isset($setting->favicon) ? asset($setting->favicon) : '' }}"
-                                data-allowed-file-extensions="png ico" data-max-file-size="1M" />
+                                data-allowed-file-extensions="png jpg jpeg ico" data-max-file-size="1M" />
                         </div>
 
-                        <button class="btn btn-primary mt-2" type="submit">
+                        <button class="btn btn-primary mt-3 animate-up-2" type="submit">
                             <i class="bi bi-save me-1"></i> {{ __('settings.save_changes') }}
                         </button>
                     </form>

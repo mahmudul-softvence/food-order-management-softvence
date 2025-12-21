@@ -10,71 +10,65 @@
                             <i class="bi bi-house-door fs-6"></i>
                         </a>
                     </li>
-                    <li class="breadcrumb-item"><a href="{{ route('teams') }}">Teams</a></li>
-                    <li class="breadcrumb-item active">Edit Team</li>
+                    <li class="breadcrumb-item"><a href="{{ route('teams') }}">{{ __('teams.breadcrumb_teams') }}</a></li>
+                    <li class="breadcrumb-item active">{{ __('teams.edit_team.breadcrumb_edit') }}</li>
                 </ol>
             </nav>
 
-            <h2 class="h4">Edit Team</h2>
-            <small>Update team information here.</small>
+            <h2 class="h4">{{ __('teams.edit_team.title') }}</h2>
+            <small>{{ __('teams.edit_team.description') }}</small>
         </div>
 
-        <a href="{{ route('teams') }}" class="btn btn-gray-800">
-            <i class="fas fa-arrow-left me-2"></i> Back
+        <a href="{{ route('teams') }}" class="btn btn-gray-800 animate-up-2">
+            <i class="fas fa-arrow-left me-2"></i> {{ __('teams.edit_team.back') }}
         </a>
     </div>
 
     <div class="card border-0 shadow mb-4">
         <div class="card-body">
-
             <form action="{{ route('teams.update', $team->id) }}" method="POST">
                 @csrf
                 @method('PUT')
 
                 <div class="row">
-
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">Team Name <span class="text-danger">*</span></label>
+                        <label class="form-label">{{ __('teams.edit_team.team_name') }} <span
+                                class="text-danger">*</span></label>
                         <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"
-                            value="{{ old('name', $team->name) }}" placeholder="Enter team name" required>
-
+                            value="{{ old('name', $team->name) }}"
+                            placeholder="{{ __('teams.edit_team.team_name_placeholder') }}" required>
                         @error('name')
                             <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
 
-
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">Status</label>
+                        <label class="form-label">{{ __('teams.edit_team.status') }}</label>
                         <select name="status" class="form-select @error('status') is-invalid @enderror">
-                            <option value="1" {{ old('status', $team->status) == 1 ? 'selected' : '' }}>Active</option>
-                            <option value="0" {{ old('status', $team->status) == 0 ? 'selected' : '' }}>Inactive
-                            </option>
+                            <option value="1" {{ old('status', $team->status) == 1 ? 'selected' : '' }}>
+                                {{ __('teams.status_active') }}</option>
+                            <option value="0" {{ old('status', $team->status) == 0 ? 'selected' : '' }}>
+                                {{ __('teams.status_deactive') }}</option>
                         </select>
-
                         @error('status')
                             <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
 
                     <div class="col-12 mb-3">
-                        <label class="form-label">Note</label>
+                        <label class="form-label">{{ __('teams.edit_team.note') }}</label>
                         <textarea name="note" rows="4" class="form-control @error('note') is-invalid @enderror"
-                            placeholder="Write note about the team...">{{ old('note', $team->note) }}</textarea>
-
+                            placeholder="{{ __('teams.edit_team.note_placeholder') }}">{{ old('note', $team->note) }}</textarea>
                         @error('note')
                             <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
-
                 </div>
 
-                <button class="btn btn-primary mt-3 animate-up-1">
-                    <i class="fas fa-save me-2"></i> Update Team
+                <button class="btn btn-primary mt-3 animate-up-2">
+                    <i class="bi bi-save me-1"></i> {{ __('teams.edit_team.update_team') }}
                 </button>
-
             </form>
-
         </div>
     </div>
 @endsection

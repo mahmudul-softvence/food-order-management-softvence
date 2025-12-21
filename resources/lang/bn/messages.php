@@ -9,7 +9,7 @@ return [
     'registered_users'  => 'নিবন্ধিত ব্যবহারকারী',
     'total_foods'       => 'মোট খাবার',
     'success_orders'    => 'সফল অর্ডার',
-    'cancelled_orders'  => 'বাতিল হওয়া অর্ডার',
+    'due' => 'বাকি',
     'order_id'  => 'অর্ডার আইডি',
     'customer'  => 'গ্রাহক',
     'amount'    => 'পরিমাণ',

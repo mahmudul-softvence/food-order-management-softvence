@@ -33,7 +33,7 @@
                                     <p class="pb-3">{{ __('messages.today_updates') }}</p>
                                 </div>
                                 <div>
-                                    <a href="#" class="btn btn-primary">
+                                    <a href="{{ route('settings') }}" class="btn btn-primary">
                                         <i class="bi bi-gear me-1"></i> {{ __('messages.go_to_settings') }}
                                     </a>
                                 </div>
@@ -58,7 +58,7 @@
                                 </div>
                                 <div class="d-right-text">
                                     <h4>{{ __('messages.registered_users') }}</h4>
-                                    <h3>1234</h3>
+                                    <h3>{{ $total_register_user }}</h3>
                                 </div>
                             </div>
 
@@ -74,7 +74,7 @@
                                 </div>
                                 <div class="d-right-text">
                                     <h4>{{ __('messages.total_foods') }}</h4>
-                                    <h3>1234</h3>
+                                    <h3>{{ $total_foods }}</h3>
                                 </div>
                             </div>
                         </div>
@@ -89,7 +89,7 @@
                                 </div>
                                 <div class="d-right-text">
                                     <h4>{{ __('messages.success_orders') }}</h4>
-                                    <h3>1234</h3>
+                                    <h3>{{ $total_success_order }}</h3>
                                 </div>
                             </div>
                         </div>
@@ -103,8 +103,8 @@
                                     <i class="bi bi-bag-x"></i>
                                 </div>
                                 <div class="d-right-text">
-                                    <h4>{{ __('messages.cancelled_orders') }}</h4>
-                                    <h3>1234</h3>
+                                    <h4>{{ __('messages.due') }}</h4>
+                                    <h3>{{ $total_due }}</h3>
                                 </div>
                             </div>
                         </div>
@@ -117,7 +117,7 @@
     @role(['admin', 'vendor'])
         <div class="row pt-4 g-4">
             <div class="col-md-7">
-                <div class="card border-0 shadow ">
+                <div class="card border-0 shadow h-100">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="card-title mb-0">{{ __('messages.new_order_request') }}</h5>
 

@@ -1,6 +1,5 @@
 @extends('backend.master')
 
-
 @section('content')
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
         <div>
@@ -11,73 +10,72 @@
                             <i class="bi bi-house-door fs-6"></i>
                         </a>
                     </li>
-                    <li class="breadcrumb-item active">Roles</li>
+                    <li class="breadcrumb-item active">{{ __('roles.breadcrumb_roles') }}</li>
                 </ol>
             </nav>
 
-            <h2 class="h4">User Roles</h2>
-            <small class="mb-0">Manage all role of an user.</small>
+            <h2 class="h4">{{ __('roles.title') }}</h2>
+            <small class="mb-0">{{ __('roles.description') }}</small>
         </div>
 
-        <a href="{{ route('roles.create') }}" class="btn btn-primary mt-3 mt-md-0">
-            <i class="bi bi-plus-circle me-2"></i>Add Role
+        <a href="{{ route('roles.create') }}" class="btn btn-primary mt-3 mt-md-0 animate-up-2">
+            <i class="bi bi-plus-circle me-2"></i>{{ __('roles.add_role') }}
         </a>
     </div>
 
     <div class="table-settings mb-4">
-        <div class="row g-4">
+        <form action="{{ route('roles') }}" method="GET">
+            <div class="row g-4">
+                <div class="col-12 col-md-4 col-xxl-3">
+                    <div class="input-group me-2 me-lg-3">
+                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                        <input type="text" name="search" class="form-control"
+                            placeholder="{{ __('roles.search_placeholder') }}" value="{{ request('search') }}">
+                    </div>
+                </div>
 
-            <div class="col-6 col-md-4 col-xxl-2">
-                <div class="input-group me-2 me-lg-3 fmxw-400">
-                    <span class="input-group-text">
-                        <i class="fas fa-search"></i>
-                    </span>
-                    <input type="text" class="form-control" placeholder="Search by role name">
+                <div class="col-12 col-md-3 col-xxl-2 d-flex justify-content-end justify-content-md-start gap-3">
+                    <button class="btn btn-primary order-2 order-md-0"><i class="bi bi-funnel me-1"></i> Filter</button>
+                    <a href="{{ route('roles') }}" class="btn btn-secondary">Clear</a>
                 </div>
             </div>
-
-            <div class="col-md-4 col-xxl-2 d-flex justify-content-end justify-content-md-start gap-2">
-                <button class="btn btn-primary"><i class="bi bi-funnel me-1"></i> Filter</button>
-                <button class="btn btn-secondary ms-2">Clear</button>
-            </div>
-
-        </div>
+        </form>
     </div>
 
     <div class="row">
         <div class="col-md-12">
             <div class="card border-0 shadow">
                 <div class="card-header">
-                    <h5 class="card-title">Roles</h5>
+                    <h5 class="card-title">{{ __('roles.title') }}</h5>
                 </div>
 
                 <div class="card-body table-wrapper table-responsive">
                     <table class="table table-hover align-middle">
                         <thead>
                             <tr>
-                                <th>#</th>
-                                <th>Name</th>
-                                <th>Total users</th>
-                                <th>Total Active</th>
-                                <th>Total Deactive</th>
-                                <th>Action</th>
+                                <th>{{ __('roles.table.id') }}</th>
+                                <th>{{ __('roles.table.name') }}</th>
+                                <th>{{ __('roles.table.total_users') }}</th>
+                                <th>{{ __('roles.table.total_active') }}</th>
+                                <th>{{ __('roles.table.total_deactive') }}</th>
+                                <th>{{ __('roles.table.action') }}</th>
                             </tr>
                         </thead>
-
                         <tbody>
                             @foreach ($roles as $index => $role)
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
                                     <td>{{ Str::ucfirst($role->name) }}</td>
-                                    <th><span class="text-primary">{{ $role->users->count() }}</span></th>
-                                    <th><span class="text-success">{{ $role->users->where('status', 1)->count() }}</span>
-                                    <th><span class="text-danger">{{ $role->users->where('status', 0)->count() }}</span>
-                                    </th>
+                                    <td><span class="text-primary">{{ $role->users->count() }}</span></td>
+                                    <td><span class="text-success">{{ $role->users->where('status', 1)->count() }}</span>
+                                    </td>
+                                    <td><span class="text-danger">{{ $role->users->where('status', 0)->count() }}</span>
+                                    </td>
                                     <td>
                                         <div class="btn-group btn-group-sm">
                                             @can('role.edit')
                                                 <a href="{{ route('roles.edit', $role->id) }}" class="btn btn-tertiary">
-                                                    <i class="bi bi-pencil me-1"></i> Manage
+                                                    <i class="bi bi-pencil me-1"></i> {{ __('roles.table.manage') }}
                                                 </a>
                                             @endcan
 
@@ -88,7 +86,6 @@
                                             @endcan
                                         </div>
 
-
                                         <form id="delete-form-{{ $role->id }}"
                                             action="{{ route('roles.destroy', $role->id) }}" method="POST"
                                             style="display:none;">
@@ -96,8 +93,6 @@
                                             @method('DELETE')
                                         </form>
                                     </td>
-
-
                                 </tr>
                             @endforeach
                         </tbody>
@@ -112,13 +107,13 @@
     <script>
         function confirmDelete(id) {
             Swal.fire({
-                title: "Are you sure?",
-                text: "You won't be able to revert this action!",
+                title: "{{ __('roles.delete_confirm_title') }}",
+                text: "{{ __('roles.delete_confirm_text') }}",
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#d33",
-                cancelButtonColor: "#6c757d",
-                confirmButtonText: "Yes, delete it"
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "{{ __('roles.delete_confirm_yes') }}"
             }).then((result) => {
                 if (result.isConfirmed) {
                     document.getElementById('delete-form-' + id).submit();

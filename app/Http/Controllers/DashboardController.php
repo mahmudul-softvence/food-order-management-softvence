@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Food;
 use App\Models\FoodCategory;
 use App\Models\Order;
 use App\Models\TodayMeal;
@@ -27,8 +28,20 @@ class DashboardController extends Controller
             ->get()
             ->groupBy('food_category_id');
 
+        $total_register_user = User::count();
 
-        return view('backend.dashboard.index', compact('categories', 'pending_orders', 'todaysMeals'));
+        $total_foods = Food::where('user_id', Auth::id())
+            ->count();
+
+        $total_success_order = Order::where('vendor_id', Auth::id())
+            ->where('status', 'received')->count();
+
+        $total_due = Order::where('vendor_id', Auth::id())
+            ->where('payment_status', 'unpaid')
+            ->count();
+
+
+        return view('backend.dashboard.index', compact('categories', 'pending_orders', 'todaysMeals', 'total_register_user', 'total_foods', 'total_success_order', 'total_due'));
     }
 
 

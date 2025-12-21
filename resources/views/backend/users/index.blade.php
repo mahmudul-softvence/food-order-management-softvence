@@ -53,12 +53,11 @@
                     </div>
                 </div>
 
-                <div class="col-md-4 col-xxl-2 d-flex gap-2">
-                    <button class="btn btn-primary"><i class="bi bi-funnel me-1"></i> Filter</button>
-
-                    <a href="{{ route('users') }}" class="btn btn-secondary">
-                        Clear
-                    </a>
+                <div class="col-12 col-md-3 col-xxl-2 d-flex justify-content-end justify-content-md-start gap-3">
+                    <button type="submit" class="btn btn-primary order-2 order-md-0">
+                        <i class="bi bi-funnel me-1"></i> Filter
+                    </button>
+                    <a href="{{ route('users') }}" class="btn btn-secondary">Clear</a>
                 </div>
 
             </div>

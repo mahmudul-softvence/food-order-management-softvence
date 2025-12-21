@@ -8,9 +8,17 @@ use Spatie\Permission\Models\Role;
 
 class RoleController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $roles = Role::get();
+        $query = Role::query();
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where('name', 'like', "%{$search}%");
+        }
+
+        $roles = $query->get();
+
         return view('backend.roles.index', compact('roles'));
     }
 

@@ -1,6 +1,6 @@
 <nav class="navbar navbar-dark navbar-theme-primary px-4 col-12 d-lg-none">
     <a class="navbar-brand me-lg-5" href="{{ route('dashboard') }}">
-        <img class="navbar-brand-dark" src="{{ asset('backend/uploads/logo.png') }}" alt="Volt logo" />
+        <img class="navbar-brand-dark" src="{{ asset($settings->logo ?? '') }}" alt="{{ $settings->site_name ?? '' }}" />
     </a>
     <div class="d-flex align-items-center">
         <button class="navbar-toggler d-lg-none collapsed" type="button" data-bs-toggle="collapse"
@@ -43,7 +43,8 @@
         </div>
 
         <a class="logo d-none d-md-block">
-            <img src="{{ asset('backend/uploads/logo.png') }}" alt="Logo" class="w-100 logo-white">
+            <img src="{{ asset($settings->logo ?? '') }}" alt="{{ $settings->site_name ?? '' }}"
+                class="w-100 logo-white">
         </a>
 
         <ul class="nav flex-column pt-3 pt-md-0">
@@ -259,7 +260,7 @@
             @endcan
 
             @can('role.view')
-                <li class="nav-item {{ request()->routeIs('roles') ? 'active' : '' }}">
+                <li class="nav-item {{ request()->routeIs('roles*') ? 'active' : '' }}">
                     <a href="{{ route('roles') }}" class="nav-link">
                         <span class="sidebar-icon"><i class="bi bi-shield-check me-2"></i></span>
                         <span class="sidebar-text">{{ __('messages.roles') }}</span>
@@ -288,10 +289,6 @@
                     </a>
                 </li>
             @endcan
-
-
-
-
 
         </ul>
     </div>

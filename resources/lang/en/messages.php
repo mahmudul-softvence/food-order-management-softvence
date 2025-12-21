@@ -9,7 +9,7 @@ return [
     'registered_users'  => 'Registered Users',
     'total_foods'       => 'Total Foods',
     'success_orders'    => 'Success Orders',
-    'cancelled_orders'  => 'Cancelled Orders',
+    'due' => 'Due',
     'order_id'  => 'Order ID',
     'customer'  => 'Customer',
     'amount'    => 'Amount',

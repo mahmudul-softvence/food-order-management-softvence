@@ -36,7 +36,7 @@ class UserController extends Controller
 
     public function create()
     {
-        $teams = Team::get();
+        $teams = Team::where('status', true)->get();
         $roles = Role::get();
         return view('backend.users.create', compact('teams', 'roles'));
     }
@@ -99,7 +99,7 @@ class UserController extends Controller
     public function edit($id)
     {
         $user = User::findOrFail($id);
-        $teams = Team::all();
+        $teams = Team::where('status', true)->get();
         $roles = Role::get();
 
         return view('backend.users.edit', compact('user', 'teams', 'roles'));

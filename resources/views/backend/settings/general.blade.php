@@ -75,7 +75,7 @@
                                 value="{{ $setting->footer_text ?? '' }}">
                         </div>
 
-                        <button class="btn btn-primary mt-2" type="submit">
+                        <button class="btn btn-primary mt-3 animate-up-2" type="submit">
                             <i class="bi bi-save me-1"></i> {{ __('settings.save_changes') }}
                         </button>
                     </form>

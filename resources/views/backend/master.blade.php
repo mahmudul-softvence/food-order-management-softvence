@@ -3,7 +3,8 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Dashboard</title>
+    <title>{{ $settings->site_name ?? 'SVD Delta' }}</title>
+    <link rel="icon" type="image/x-icon" href="{{ asset($settings->favicon ?? '') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     @include('backend.layout.style')

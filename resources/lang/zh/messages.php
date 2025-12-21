@@ -9,7 +9,7 @@ return [
     'registered_users'  => '注册用户',
     'total_foods'       => '总食物',
     'success_orders'    => '成功订单',
-    'cancelled_orders'  => '取消订单',
+    'due' => '待处理',
     'order_id'  => '订单编号',
     'customer'  => '顾客',
     'amount'    => '金额',

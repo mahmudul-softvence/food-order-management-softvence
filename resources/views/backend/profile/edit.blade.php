@@ -59,7 +59,7 @@
 
                             <div class="col-md-6 mb-3">
                                 <label for="team_id">{{ __('profile.team') }}</label>
-                                <select name="team_id" id="team_id" class="form-select">
+                                <select name="team_id" id="team_id" class="form-select" disabled>
                                     <option value="">{{ __('profile.select_one') }}</option>
                                     @foreach ($teams as $team)
                                         <option @if ($team->id == $user->team_id) selected @endif

@@ -194,7 +194,7 @@
                 </div>
 
                 <button class="btn btn-primary mt-3 animate-up-2">
-                    <i class="fas fa-save me-2"></i> Save User
+                    <i class="bi bi-save me-1"></i> Save User
                 </button>
 
             </form>
